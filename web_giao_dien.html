@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tra cứu biển số xe và lỗi vi phạm</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('https://nld.mediacdn.vn/2019/7/13/5-chot-1563024627752648435093.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.8); 
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            margin-top: 20px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .violations {
+            margin-top: 10px;
+            text-align: left;
+            font-weight: normal;
+            color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Tra cứu biển số xe và lỗi vi phạm</h1>
+        <form id="lookup-form">
+            <label for="plate-number">Nhập biển số xe:</label>
+            <input type="text" id="plate-number" name="plate-number" placeholder="VD: 89A-03230" required>
+            <button type="submit">Tra cứu</button>
+        </form>
+        <div id="result">
+        </div>
+    </div>
+
+    <script>
+    
+        document.getElementById('lookup-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const plateNumber = document.getElementById('plate-number').value.trim();
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = "Đang tra cứu...";
+
+            // NHÉT API VÀO
+            fetch(`https://your-api-url.com/lookup?plate=${encodeURIComponent(plateNumber)}`)
+                .then(response => response.json()) 
+                .then(data => {
+                    let resultHtml = `Biển số: ${plateNumber} - Chủ sở hữu: ${data.owner}`;
+
+                    // KIẾM TRA LỖI VI PHẠM
+                    if (data.violations && data.violations.length > 0) {
+                        resultHtml += `<div class="violations"><strong>Lỗi vi phạm:</strong><ul>`;
+                        data.violations.forEach(violation => {
+                            resultHtml += `<li>Ngày: ${violation.date} - Lý do: ${violation.reason} - Phạt: ${violation.fine}</li>`;
+                        });
+                        resultHtml += `</ul></div>`;
+                    } else {
+                        resultHtml += `<div class="violations">Không có lỗi vi phạm nào.</div>`;
+                    }
+
+                    resultDiv.innerHTML = resultHtml;
+                })
+                .catch(error => {
+                    resultDiv.textContent = "Không tìm thấy thông tin hoặc đã có lỗi xảy ra.";
+                    console.error('Error:', error);
+                });
+        });
+    </script>
+</body>
+</html>
