@@ -5,18 +5,100 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tra cứu biển số xe và lỗi vi phạm</title>
     <style>
+        title {
+            
+        }
         body {
             font-family: Arial, sans-serif;
-            background-image: url('https://nld.mediacdn.vn/2019/7/13/5-chot-1563024627752648435093.jpg');
+            background-image: url('https://images.pexels.com/photos/1044329/pexels-photo-1044329.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+            
             background-attachment: fixed;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: rgba(111, 109, 109, 0.9); 
+            width: 250px;
+            height: 100%; 
+            padding: 20px;
+            box-shadow: 2px 0 8px rgba(189, 188, 188, 0.1);
+            border-right: 1px solid #ccc;
+        }
+
+        .sidebar h2 {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin: 15px 0;
+        }
+
+        .sidebar ul li a {
+            text-decoration: none;
+            color: white;
+            background-color: #510ee2;
+            padding: 10px 15px;
+            border-radius: 20px;
+            display: block;
+            text-align: center;
+            font-weight: bold;
+            opacity: 0.7; 
+            transition: opacity 0.3s, background-color 0.3s;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: #3c4b9e;
+            opacity: 1; 
+        }
+    
+
+        .contact-info {
+            margin-top: 30px;
+            border-top: 1px solid #ccc;
+            padding-top: 20px;
+        }
+
+        .contact-info h3 {
+            margin-bottom: 10px;
+        }
+
+        .contact-info p {
+            margin: 10px 0;
+        }
+
+        .contact-info a {
+            text-decoration: none;
+            color: #3c4b9e;
+            font-weight: bold;
+        }
+
+        .contact-info img {
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        .main-container {
+            margin-left: 270px; 
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
+            width: calc(100% - 270px); 
+            padding-top: 20px;
+            flex-direction: column;
         }
 
         .container {
@@ -42,15 +124,21 @@
 
         button {
             padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
+            background-color: #102abb;
+            color: rgb(200, 10, 10);
             border: none;
-            border-radius: 4px;
+            border-radius: 20px;
+
             cursor: pointer;
+            font-weight: bold;
+            opacity: 0.7; 
+            transition: opacity 0.3s, background-color 0.3s;
         }
 
         button:hover {
-            background-color: #45a049;
+
+            background-color: #3c4b9e;
+            opacity: 1; 
         }
 
         #result {
@@ -68,18 +156,38 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Tra cứu biển số xe và lỗi vi phạm</h1>
-        <form id="lookup-form">
-            <label for="plate-number">Nhập biển số xe:</label>
-            <input type="text" id="plate-number" name="plate-number" placeholder="VD: 89A-03230" required>
-            <button type="submit">Tra cứu</button>
-        </form>
-        <div id="result">
+    <div class="sidebar">
+        <h2>Danh mục</h2>
+        <ul>
+            <li><a href="">Trang chủ</a></li>
+            <li><a href="mucphat.html" target="_self">Mức phạt hành chính</a></li>
+            <li><a href="https://kalite.vn/wp-content/uploads/2021/09/maqrkalite.jpg" target="_self">Thanh toán phạt nguội</a></li>
+            <li><a href="#" onclick="goToContact()">Liên hệ khiếu nại</a></li>
+        </ul>
+        <div class="contact-info">
+            <h3>Liên hệ</h3>
+            <p>Hotline cục CSGT: <a href="tel:0123456789">0692342608</a></p>
+            <p>
+                <a href="https://zalo.me/0985263005" target="_blank">
+                    <img src="https://play-lh.googleusercontent.com/rFIOt4fDSCgJh_FkHU2qP8YiZUUhfVoKoNfQFbPEM-Wl8zuyuwn7vzkEx_XMh5B6FfO3" alt="Zalo" style="width: 24px; height: 24px;">
+                    0985263005
+                </a>
+            </p>
         </div>
     </div>
-
-    <script>
+    <div class="main-container">
+        <div class="container">
+            <h1>Tra cứu biển số xe và lỗi vi phạm</h1>
+            <form id="lookup-form">
+                <label for="plate-number">Nhập biển số xe:</label>
+                <input type="text" id="plate-number" name="plate-number" placeholder="VD: 89A-03230" required>
+                <button type="submit">Tra cứu</button>
+            </form>
+            <div id="result"></div>
+        </div>
+    </div>
+</body>
+     <script>
     
         document.getElementById('lookup-form').addEventListener('submit', function (e) {
             e.preventDefault();
@@ -87,32 +195,32 @@
             const plateNumber = document.getElementById('plate-number').value.trim();
 
             const resultDiv = document.getElementById('result');
-            resultDiv.textContent = "Đang tra cứu...";
+            resultDiv.textContent = "Đang tra c?u...";
 
             // NHÉT API VÀO
             fetch(`https://your-api-url.com/lookup?plate=${encodeURIComponent(plateNumber)}`)
                 .then(response => response.json()) 
                 .then(data => {
-                    let resultHtml = `Biển số: ${plateNumber} - Chủ sở hữu: ${data.owner}`;
+                    let resultHtml = `Bi?n s?: ${plateNumber} - Ch? s? h?u: ${data.owner}`;
 
-                    // KIẾM TRA LỖI VI PHẠM
+                    // KI?M TRA L?I VI PH?M
                     if (data.violations && data.violations.length > 0) {
-                        resultHtml += `<div class="violations"><strong>Lỗi vi phạm:</strong><ul>`;
+                        resultHtml += `<div class="violations"><strong>L?i vi ph?m:</strong><ul>`;
                         data.violations.forEach(violation => {
-                            resultHtml += `<li>Ngày: ${violation.date} - Lý do: ${violation.reason} - Phạt: ${violation.fine}</li>`;
+                            resultHtml += `<li>Ngày: ${violation.date} - L? do: ${violation.reason} - Ph?t: ${violation.fine}</li>`;
                         });
                         resultHtml += `</ul></div>`;
                     } else {
-                        resultHtml += `<div class="violations">Không có lỗi vi phạm nào.</div>`;
+                        resultHtml += `<div class="violations">Không có l?i vi ph?m nào.</div>`;
                     }
 
                     resultDiv.innerHTML = resultHtml;
                 })
                 .catch(error => {
-                    resultDiv.textContent = "Không tìm thấy thông tin hoặc đã có lỗi xảy ra.";
+                    resultDiv.textContent = "Không t?m th?y thông tin ho?c đ? có l?i x?y ra.";
                     console.error('Error:', error);
                 });
         });
     </script>
-</body>
 </html>
+
